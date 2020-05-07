@@ -55,3 +55,7 @@
 ## Handling Delete requests
 
 - Created `delete` request and result sended to the client
+
+## Fixing a bug
+
+- Do early error return and make code cleaner
