@@ -31,3 +31,8 @@
 
 * Used params esential and required values.
 * Used query string primeters to provide additional data for a back-end-services
+
+## Handling get requests
+
+- Created 3 courses with id params to respond the clients
+- If this page is not available and so status 404, the clients will see a massage
