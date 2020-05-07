@@ -42,3 +42,8 @@
 - Creatde post request for courses
 
 * tested with `postman`
+
+## Input validation
+
+- installed `joi`
+- specialities of value of keys are defined with `joi` and messages send automatically from the `joi`
