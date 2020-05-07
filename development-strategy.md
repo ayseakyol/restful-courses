@@ -36,3 +36,9 @@
 
 - Created 3 courses with id params to respond the clients
 - If this page is not available and so status 404, the clients will see a massage
+
+## Handling post requests
+
+- Creatde post request for courses
+
+* tested with `postman`
