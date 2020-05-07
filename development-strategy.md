@@ -47,3 +47,7 @@
 
 - installed `joi`
 - specialities of value of keys are defined with `joi` and messages send automatically from the `joi`
+
+## Handling put requests
+
+- Created `put` request with its validation and send request.
