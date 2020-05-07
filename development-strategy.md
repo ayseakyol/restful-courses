@@ -51,3 +51,7 @@
 ## Handling put requests
 
 - Created `put` request with its validation and send request.
+
+## Handling Delete requests
+
+- Created `delete` request and result sended to the client
