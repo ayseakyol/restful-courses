@@ -59,3 +59,7 @@
 ## Fixing a bug
 
 - Do early error return and make code cleaner
+
+## Reading and writing "courses.json"
+
+- Added fs.readFile and fs.writeFile

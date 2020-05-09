@@ -1,15 +1,14 @@
-{
-  "name": "express-demo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+[
+  {
+    "id": 1,
+    "name": "CSS"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1"
+  {
+    "id": 2,
+    "name": "HTML"
+  },
+  {
+    "id": 3,
+    "name": "JS"
   }
-}
+]
