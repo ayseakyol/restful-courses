@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require("joi"); // You need to install joi before you can require it :: Do "npm install joi" in your project terminal
 const express = require("express");
 const fs = require("fs");
 const app = express();
@@ -12,18 +12,26 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/courses", (req, res) => {
-  fs.readFile(file_path, "utf-8", (err, data) => {
+  fs.readFile(filePath, "utf-8", (err, data) => { // changed file_path to filePath. that's what was declared on line 8.
     if (err) res.status(404).send(err);
     res.send(JSON.parse(data));
   });
 });
 
 app.get("/api/courses/:id", (req, res) => {
-  fs.readFile(COURSES_PATH, "utf-8", callBack);
+  /**
+   * 1. changed COURSES_PATH to filePath as declared on line 8.
+   * 
+   * 2. remove "callBack" and add a call-back function that
+   *     
+   */
+  fs.readFile(filePath, "utf-8", (err, data)=>{
+  let courses = JSON.parse(data) // convert the data in the courses.json into javascript object
   const course = courses.find((c) => c.id === parseInt(req.params.id));
   if (!course)
     return res.status(404).send("The course with the given id is not found.");
   res.send(course);
+  })
 });
 
 app.post("/api/courses", (req, res) => {
@@ -31,7 +39,7 @@ app.post("/api/courses", (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   } else {
-    fs.readFile(file_path, "utf-8", (err, data) => {
+    fs.readFile(filePath, "utf-8", (err, data) => { // changed file_path to filePath. that's what was declared on line 8.
       if (err) {
         res.status(404).send(err);
       } else {
@@ -41,53 +49,69 @@ app.post("/api/courses", (req, res) => {
           name: req.body.name,
         };
         parsedObject.push(course);
-        let objToString = JSON.stringify(parsedObject);
+        let objToString = JSON.stringify(parsedObject,null,2);// and "null" and 2 as the second and third arguments of the JSON.stringify function for good formatting
 
-        fs.writeFile(file_path, objToString, (err) => {
+        fs.writeFile(filePath, objToString, (err) => { // changed file_path to filePath. that's what was declared on line 8.
           if (err) res.status(404).send(err);
-          res.send(objToString);
+          res.send(course); // replace objToString with "course" to display the new course created
         });
       }
     });
   }
 });
 
-// app.put("/api/courses/:id", (req, res) => {
-//  let courses = () => {
-//    const data = fs.readFileSync(filePath, 'utf-8')
-//    let parsedData = JSON.parse(data)
-//    return parsedData;
-//   };
+app.put("/api/courses/:id", (req, res) => {
+ let courses = () => {
+   const data = fs.readFileSync(filePath, 'utf-8')
+   let parsedData = JSON.parse(data)
+   return parsedData;
+  };
 
-//   const course = courses.find((c) => c.id === parseInt(req.params.id));
-//   if (!course)
-//     return res.status(404).send("The course with the given id is not found.");
+  const course = courses().find((c) => c.id === parseInt(req.params.id)); // executed the courses function : like courses()
+  if (!course)
+    return res.status(404).send("The course with the given id is not found.");
 
-//   const { error } = validateCourse(req.body);
-//   if (error) return res.status(400).send(error.details[0].message);
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
-//   course.name = req.body.name;
-//   let objectToString = JSON.stringify(courses)
-//   fs.writeFile(file_path, objToString, (err) => {
-//     if (err) res.status(404).send(err);
-//     res.send(courses);
-// });
+  course.name = req.body.name;
+  let Allcourses = courses(); // assign the 
+  Allcourses.forEach(element => {
+    if(element.id === parseInt(req.params.id)){ // loop through All the courses and update the one with the matching id
+      element.name = req.body.name;
+    }
+  });
 
-// app.delete("/api/courses/:id", (req, res) => {
-//    let courses = () => {
-//    const data = fs.readFileSync(filePath, 'utf-8')
-//    let parsedData = JSON.parse(data)
-//    return parsedData;
-//   };
-//   const course = courses.find((c) => c.id === parseInt(req.params.id));
-//   if (!course)
-//     return res.status(404).send("The course with the given id is not found.");
+  let objectToString = JSON.stringify(Allcourses,null,2)
+  fs.writeFile(filePath, objectToString, (err) => {// change file_path and objToString to filePath and objectToString respectively
+    if (err) return res.status(404).send(err); //added the return keyword
+    res.send(course); // replaced courses to course
+});
+}) // added "})"
 
-//   const index = courses.indexOf(course);
-//   courses.splice(index, 1);
+app.delete("/api/courses/:id", (req, res) => {
+   let courses = () => {
+   const data = fs.readFileSync(filePath, 'utf-8')
+   let parsedData = JSON.parse(data)
+   return parsedData;
+  };
+  const course = courses().find((c) => c.id === parseInt(req.params.id));  // executed the courses function : like courses()
+  if (!course)
+    return res.status(404).send("The course with the given id is not found.");
 
-//   res.send(course);
-// });
+    let Allcourses = courses(); // assign the 
+    Allcourses.forEach((element, index) => {
+      if(element.id === parseInt(req.params.id)){ // loop through All the courses and delete the one with the matching id
+        Allcourses.splice(index, 1);
+      }
+    });
+  
+    let objectToString = JSON.stringify(Allcourses,null,2)
+    fs.writeFile(filePath, objectToString, (err) => {// change file_path and objToString to filePath and objectToString respectively
+      if (err) return res.status(404).send(err); //added the return keyword
+      res.send(course); 
+  });
+});
 
 function validateCourse(course) {
   const schema = {
